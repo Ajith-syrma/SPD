@@ -718,7 +718,7 @@ namespace SPD_Write_Bot
             EnableMouse(true);
             
         }
-        public void BotStart3(string serial_number, string customer_name)
+        public async void BotStart3(string serial_number, string customer_name)
         {
             string result = "PASS";// Default result is success unless an error occurs
             string checkbx1status = "Default checkbox ticked";  // Initialize default values
@@ -761,11 +761,7 @@ namespace SPD_Write_Bot
 
             // Edit Configuration button click
             SimulateLeftMouseClick(680, 340);
-            Thread.Sleep(500);
-
-
-           
-
+            Thread.Sleep(500);           
                 var serialnumber = clsCheckboxValivation.checkBoxValidation();
                 // 1st cfg button click
                 if (serialnumber != null && serialnumber.Count > 0)
@@ -779,7 +775,7 @@ namespace SPD_Write_Bot
                             // 1st cfg button click
                             checkbx1status = "Manual check box ticked";
                             SimulateLeftMouseClick(488, 402);
-                            Thread.Sleep(500);
+                            Thread.Sleep(250);
 
                         }
                     }
@@ -816,7 +812,7 @@ namespace SPD_Write_Bot
                 //SimulateLeftMouseClick(688, 355);
                 //Thread.Sleep(500);
 
-                SendKeys.SendWait("{BACKSPACE}");
+            SendKeys.SendWait("{BACKSPACE}");
             Thread.Sleep(50);
             SendKeys.SendWait("{BACKSPACE}");
             Thread.Sleep(50);
@@ -855,7 +851,7 @@ namespace SPD_Write_Bot
                             //2nd cfg ButtClick 719,426
                             checkbx2status = "Manual check box ticked";
                             SimulateLeftMouseClick(488, 427);
-                            Thread.Sleep(500);
+                            Thread.Sleep(250);
                         }
                     }
                 }
@@ -954,12 +950,12 @@ namespace SPD_Write_Bot
 
                 SimulateLeftMouseClick(760, 267);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("57");
 
-                Thread.Sleep(500);
+                Thread.Sleep(100);
 
                 SimulateLeftMouseClick(760, 287);
                 SendKeys.SendWait("{BACKSPACE}");
@@ -980,95 +976,95 @@ namespace SPD_Write_Bot
 
                 SimulateLeftMouseClick(760, 307);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("3" + SerialFull.Substring(3, 1));
 
-                Thread.Sleep(500);
+                Thread.Sleep(100);
 
                 SimulateLeftMouseClick(760, 327);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("3" + SerialFull.Substring(4, 1));
 
-                Thread.Sleep(500);
+                Thread.Sleep(100);
 
                 //760,390
                 SimulateLeftMouseClick(760, 347);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("3" + SerialFull.Substring(5, 1));
-                Thread.Sleep(500);
+                Thread.Sleep(100);
 
                 SimulateLeftMouseClick(760, 367);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("3" + SerialFull.Substring(6, 1));
-                Thread.Sleep(500);
+                Thread.Sleep(100);
 
                 SimulateLeftMouseClick(760, 387);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("3" + SerialFull.Substring(7, 1));
-                Thread.Sleep(500);
+                Thread.Sleep(100);
 
                 SimulateLeftMouseClick(760, 407);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("3" + SerialFull.Substring(8, 1));
-                Thread.Sleep(500);
+                Thread.Sleep(50);
 
                 SimulateLeftMouseClick(760, 427);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("3" + SerialFull.Substring(9, 1));
-                Thread.Sleep(500);
+                Thread.Sleep(100);
 
                 SimulateLeftMouseClick(760, 447);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("3" + SerialFull.Substring(10, 1));
-                Thread.Sleep(500);
+                Thread.Sleep(100);
 
 
                 SimulateLeftMouseClick(760, 467);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("3" + SerialFull.Substring(11, 1));
-                Thread.Sleep(500);
+                Thread.Sleep(100);
 
                 SimulateLeftMouseClick(760, 487);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("3" + SerialFull.Substring(12, 1));
-                Thread.Sleep(500);
+                Thread.Sleep(100);
 
                 SimulateLeftMouseClick(760, 507);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(50);
                 SendKeys.SendWait("3" + SerialFull.Substring(13, 1));
-                Thread.Sleep(500);
+                Thread.Sleep(100);
 
                 //SimulateLeftMouseClick(760, 527);
                 //SendKeys.SendWait("{BACKSPACE}");
@@ -1131,24 +1127,24 @@ namespace SPD_Write_Bot
                 SimulateLeftMouseClick(935, 395);
                 Thread.Sleep(500);
                 SimulateLeftMouseClick(635, 505);
-                Thread.Sleep(5000);
+                Thread.Sleep(4000);
 
                     //Result Button Click
                     SimulateLeftMouseClick(683, 441);
-                    Thread.Sleep(2000);
+                    Thread.Sleep(500);
 
                     //compare icon Click
                     SimulateLeftMouseClick(305, 123);
-                    Thread.Sleep(2000);
+                    Thread.Sleep(500);
 
                     //alert message ok button Click
                     SimulateLeftMouseClick(698, 416);
-                    Thread.Sleep(2000);
+                    Thread.Sleep(500);
 
                     //buffer value and o0riginal value campare ok button Click
                     // SimulateLeftMouseClick(914, 641);
                     // Thread.Sleep(100);
-                    EnableMouse(true);
+                    //EnableMouse(true);
                     foreach (Form form in Application.OpenForms)
                     {
                         if (form is ResultDisplay)
@@ -1157,6 +1153,7 @@ namespace SPD_Write_Bot
                             break;
                         }
                     }
+                    Thread.Sleep(3000);
                     rowDetails = clsTableValue.Program(customer_name, serial_number);
                    
                     ResultDisplay resultdisplay = new ResultDisplay(rowDetails, customer_name, serial_number);
@@ -1261,7 +1258,7 @@ namespace SPD_Write_Bot
 
                 // Write SPD DATA to Module button click
                 SimulateLeftMouseClick(375, 125);
-                Thread.Sleep(500);
+                Thread.Sleep(1500);
 
                // textBox1.Text = "Config value";
 
@@ -1326,7 +1323,7 @@ namespace SPD_Write_Bot
 
                 // OK button click
                 SimulateLeftMouseClick(855, 395);
-                Thread.Sleep(100);
+                Thread.Sleep(500);
 
 
                 // 2nd cfg button click
@@ -1349,7 +1346,7 @@ namespace SPD_Write_Bot
                    
                 }
                 SimulateLeftMouseClick(716, 425);
-                Thread.Sleep(100);
+                Thread.Sleep(500);
                 string errorMessage = "Check Box status of the Serial Number";  // Default error message
                 string functionName = "Essencore";
                 string serial_value = textBox1.Text;
@@ -1368,7 +1365,7 @@ namespace SPD_Write_Bot
                 SimulateLeftMouseClick(780, 380);
                 Thread.Sleep(100);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(200);
+                Thread.Sleep(100);
                 SendKeys.SendWait(year.ToString().Substring(2, 2));
                 Thread.Sleep(500);
 
@@ -1378,7 +1375,7 @@ namespace SPD_Write_Bot
                 SimulateLeftMouseClick(780, 410);
                 Thread.Sleep(100);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(200);
+                Thread.Sleep(100);
                 SendKeys.SendWait(weekNumber.ToString());
                 Thread.Sleep(500);
 
@@ -1388,11 +1385,11 @@ namespace SPD_Write_Bot
 
                 // OK button click
                 SimulateLeftMouseClick(854, 156);
-                Thread.Sleep(250);
+                Thread.Sleep(500);
 
                 // Edit SPD DATA button click
                 SimulateLeftMouseClick(680, 380);
-                Thread.Sleep(500);
+                Thread.Sleep(100);
 
                 // Jump to Text button click
                 SimulateLeftMouseClick(530, 551);
@@ -1498,46 +1495,53 @@ namespace SPD_Write_Bot
                     input = textBox1.Text.Substring(7, 1);
                     data = CaseSelection(input);
 
-                    Thread.Sleep(100);
+                    Thread.Sleep(500);
                     SimulateLeftMouseClick(760, 388);
                     SendKeys.SendWait("{BACKSPACE}");
-                    Thread.Sleep(50);
+                    Thread.Sleep(150);
                     SendKeys.SendWait("{BACKSPACE}");
-                    Thread.Sleep(50);
+                    Thread.Sleep(150);
                     SendKeys.SendWait(data);
-                    Thread.Sleep(100);
+                    Thread.Sleep(500);
 
                     SimulateLeftMouseClick(935, 390);
-                    Thread.Sleep(100);
+                    Thread.Sleep(500);
 
                     SimulateLeftMouseClick(630, 500);
                     Thread.Sleep(5000);
 
                     //Result Button Click
                     SimulateLeftMouseClick(683, 441);
-                    Thread.Sleep(2000);
+                    Thread.Sleep(1000);
 
-                    //compare icon Click
+                    //compare icon ClickS
                     SimulateLeftMouseClick(305, 123);
-                    Thread.Sleep(2000);
+                    Thread.Sleep(1000);
 
                     //alert message ok button Click
                     SimulateLeftMouseClick(698, 416);
-                    Thread.Sleep(2000);
-
+                    Thread.Sleep(1000);
+                    TableValue table = new TableValue();
                     //buffer value and o0riginal value campare ok button Click
-                  //  SimulateLeftMouseClick(914, 641);
-                    Thread.Sleep(100);
-                    foreach (Form form in Application.OpenForms)
-                    {
-                        if (form is ResultDisplay)
-                        {
-                            form.Close();
-                            break;
-                        }
-                    }
+                    //  SimulateLeftMouseClick(914, 641);
+                    //Thread.Sleep(100);
+                    //foreach (Form form in Application.OpenForms)
+                    //{
+                    //    if (form is ResultDisplay)
+                    //    {
+                    //        form.Close();
+                    //        break;
+                    //    }
+                    //}
+                    Thread.Sleep(500);
+                    table.writeErrorMessage("program start", "rowvalues", "");
+                    Thread.Sleep(500);
                     rowDetails = clsTableValue.Program(customer_name, serial_number);
+                    Thread.Sleep(100);
+                    table.writeErrorMessage(rowDetails.entries.Count() + "-" + rowDetails.hexDetails.Count(), "rowvalues", "");
                     ResultDisplay resultdisplay = new ResultDisplay(rowDetails, customer_name, serial_number);
+                    Thread.Sleep(100);
+                    table.writeErrorMessage(rowDetails.entries.Count() + "-" + rowDetails.hexDetails.Count(), customer_name.ToString(), serial_number.ToString());
                     resultdisplay.StartPosition = FormStartPosition.Manual;
                     resultdisplay.WindowState = FormWindowState.Normal;
                     resultdisplay.Location = new Point(0, 100);
@@ -1621,7 +1625,7 @@ namespace SPD_Write_Bot
                 errLogs.WriteLine("---------------------------------------------------" + DateTime.Now + "----------------------------------------------" + Environment.NewLine);
                 errLogs.WriteLine($"Log Message: {errorMessage}" + Environment.NewLine);
                 errLogs.WriteLine($"Product Type: {functionName}" + Environment.NewLine);
-                errLogs.WriteLine($"Serial Number: {Serialnumber}" + Environment.NewLine  + $"CheckBox 1 Status: {checkbx1status}" + $"|| CheckBox 2 Status: {checkbx2status}");             
+                errLogs.WriteLine($"Serial Number: {Serialnumber}" + Environment.NewLine  + $"CheckBox 1 Status: {checkbx1status} || CheckBox 2 Status: {checkbx2status}");             
                 errLogs.Close();
             }
         }
@@ -1689,7 +1693,7 @@ namespace SPD_Write_Bot
                             // SimulateLeftMouseClick(720, 395);
                             checkbx1status = "Manual check box ticked";
                             SimulateLeftMouseClick(488, 398);
-                            Thread.Sleep(500);
+                            Thread.Sleep(250);
                         }
                     }
                 }
@@ -1725,17 +1729,16 @@ namespace SPD_Write_Bot
                 Thread.Sleep(100);
 
                 SendKeys.SendWait(dec_serial);
-                Thread.Sleep(500);
+                Thread.Sleep(100);
 
                 SimulateLeftMouseClick(645, 501);
-                Thread.Sleep(500);
+                Thread.Sleep(100);
 
                 // OK button click
                 SimulateLeftMouseClick(855, 395);
                 Thread.Sleep(500);
 
-                SimulateLeftMouseClick(488, 427);
-                Thread.Sleep(500);
+               
 
                 if (serialnumber != null && serialnumber.Count > 0)
                 {
@@ -1746,11 +1749,13 @@ namespace SPD_Write_Bot
                         {
                             // 2nd cfg button click
                             checkbx2status = "Manual check box ticked";
-                            SimulateLeftMouseClick(716, 425);
-                            Thread.Sleep(500);
+                            SimulateLeftMouseClick(488, 427);
+                            Thread.Sleep(250);
                         }
                     }
                 }
+                SimulateLeftMouseClick(716, 425);
+                Thread.Sleep(500);
                 string errorMessage = "Check Box status of the Serial Number";  // Default error message
                 string functionName = "Hitachi";
                 string serial_value = textBox1.Text;
@@ -1759,7 +1764,7 @@ namespace SPD_Write_Bot
 
                 // Click User Input
                 SimulateLeftMouseClick(699, 307);
-                Thread.Sleep(500);
+                Thread.Sleep(100);
 
                 getWKCode();
 
@@ -1911,19 +1916,19 @@ namespace SPD_Write_Bot
                     Thread.Sleep(100);
 
                     SimulateLeftMouseClick(630, 500);
-                    Thread.Sleep(5000);
+                    Thread.Sleep(4000);
 
                     //Result Button Click
                     SimulateLeftMouseClick(683, 441);
-                    Thread.Sleep(2000);
+                    Thread.Sleep(1000);
 
                     //compare icon Click
                     SimulateLeftMouseClick(305, 123);
-                    Thread.Sleep(2000);
+                    Thread.Sleep(1000);
 
                     //alert message ok button Click
                     SimulateLeftMouseClick(698, 416);
-                    Thread.Sleep(2000);
+                    Thread.Sleep(1000);
                     EnableMouse(true);
                     foreach (Form form in Application.OpenForms)
                     {

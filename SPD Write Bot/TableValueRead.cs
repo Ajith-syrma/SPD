@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics.Eventing.Reader;
+using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Automation;
 using System.Windows.Forms;
 
@@ -7,17 +11,20 @@ namespace SPD_Write_Bot
 {
     public class TableValue
     {
-        private string mainWindowName;
-        private string serialNumber, Customer_Name, Serial_hexadecimal;
-        private string Serial_1, Serial_2, Serial_3, Serial_4, Serial_5, Serial_6, Serial_7;
-        private string Hex_1, Hex_2, Hex_3, Hex_4, Hex_5, Hex_6, Hex_7, Hex_8;
-        private AutomationElement desktop;
-        private List<string> serialNumbers;
-        private List<string> HexaNumbers;
+        public string mainWindowName;
+        public string serialNumber, Customer_Name, Serial_hexadecimal;
+        public string Serial_1, Serial_2, Serial_3, Serial_4, Serial_5, Serial_6, Serial_7;
+        public string Hex_1, Hex_2, Hex_3, Hex_4, Hex_5, Hex_6, Hex_7, Hex_8;
+        public AutomationElement desktop;
+        public List<string> serialNumbers;
+        public List<string> HexaNumbers;
+        public string Error_filepath = ConfigurationManager.AppSettings["FilePath1"];
+        genclass rowvalue = new genclass();
 
         // Constructor to initialize instance fields
         public genclass Program(string Cus_Name,string Ser_Number)
         {
+           // writeErrorMessage("TableValue page entr",Cus_Name, Ser_Number);
             var rowDetails=new genclass();
             try
             {
@@ -49,11 +56,11 @@ namespace SPD_Write_Bot
                     Serial_3,
                     Serial_4
                 };
-
+                    writeErrorMessage(serialNumbers.Count.ToString() + " --" + "list count", Cus_Name, Ser_Number);
                     // Convert serial number to hexadecimal
                     byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(serialNumber);
                     string hexString = BitConverter.ToString(byteArray).Replace("-", "");
-                    Console.WriteLine("Hexadecimal representation: " + hexString);
+                   // Console.WriteLine("Hexadecimal representation: " + hexString);
 
                     // Create a list of hexadecimal values
 
@@ -66,10 +73,156 @@ namespace SPD_Write_Bot
                     Hex_7 = hexString.Substring(12, 2); // "0E"
                     Hex_8 = hexString.Substring(14, 2);
                     HexaNumbers = new List<string>
-                {
+                    {
                       Hex_1, Hex_2, Hex_3, Hex_4, Hex_5, Hex_6, Hex_7,Hex_8
                 };
-                    rowDetails = Start();
+                    // start
+
+                   // writeErrorMessage(hexString + " --" + "Program Excuted Start", Cus_Name, Ser_Number);
+                  //  var resultRowDetails= Start();
+                   // rowDetails = resultRowDetails;
+                   // writeErrorMessage("Program Excuted Start", "Start Enter", "");
+                  
+                    try
+                    {
+
+                        // Initialize AutomationElement for desktop
+                        AutomationElement desktop = AutomationElement.RootElement;
+                       
+                       // writeErrorMessage("Program Excuted Start","Check11", "111");
+                        // var desktop1 =  AutomationElement.RootElement;
+                        // Create a condition to find the main window by its name
+                        Condition mainWindowCondition = new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Window);
+                       // writeErrorMessage("Program Excuted Start", "Check1221", "11122");
+                        AutomationElementCollection mainWindow = desktop.FindAll(TreeScope.Children, mainWindowCondition);
+                       // writeErrorMessage("Program Excuted Start", "Check1234341", "111333");
+                        writeErrorMessage(mainWindow.ToString(), "Main Window Count", mainWindow.Count.ToString());
+                        foreach (AutomationElement MAINWindowINSIDE in mainWindow)
+                        {
+                            if(MAINWindowINSIDE.Current.Name.ToString().Contains("DDR4 EZSPD Programmer V1.9.6"))
+                            {
+                               // writeErrorMessage("Child Page Name", MAINWindowINSIDE.Current.Name.ToString(), "");
+                                AutomationElementCollection CHILDWINDOWS = MAINWindowINSIDE.FindAll(TreeScope.Children, mainWindowCondition);
+                                if (CHILDWINDOWS.Count > 0)
+                                {
+                                   // writeErrorMessage("1", CHILDWINDOWS.Count.ToString(), "");
+                                    foreach (AutomationElement CHILDWINDOW in CHILDWINDOWS)
+                                    {
+                                       // writeErrorMessage("SRY", CHILDWINDOW.Current.Name.ToString(), "");
+                                        if (CHILDWINDOW.Current.Name.ToString().Contains("Show SPD Compare Result - All SPD Bytes are Identical"))
+                                        {
+                                            writeErrorMessage("Child window name ", CHILDWINDOW.Current.Name.ToString(), "");
+                                            rowvalue = FindTablesInChildWindow(CHILDWINDOW, Customer_Name);
+                                        }                                       
+                                        //    AutomationElementCollection CHILDWINDOWSinside = CHILDWINDOW.FindAll(TreeScope.Children, mainWindowCondition);
+                                        //writeErrorMessage("Child Page Name", CHILDWINDOW.Current.Name.ToString(), "");
+                                        //writeErrorMessage("Mugesh1", "Inside Child Window Count", CHILDWINDOWS.Count.ToString());
+                                        ////foreach (AutomationElement CHILDWINDOWall in CHILDWINDOWS)
+                                        ////{
+                                        //    writeErrorMessage("Child Page Name", MAINWindowINSIDE.Current.Name.ToString(), "");
+                                        //    writeErrorMessage("Mugesh1", "Inside Child Window Count", CHILDWINDOWS.Count.ToString());
+                                        //    //writeErrorMessage("Program Excuted Start", MAINWindowINSIDE.Current.Name.ToString(), "Page Name");
+                                        //    //if (MAINWindowINSIDE.Current.Name == "Show SPD Compare Result - All SPD Bytes are Identical")
+                                        //    //    rowvalue = FindTablesInChildWindow(MAINWindowINSIDE, Customer_Name);
+                                        //    // Print the name and other details of each child window
+                                        //    // Console.WriteLine($"  Popup Window Name: {childWindow.Current.Name}");
+                                        //    //Console.WriteLine($"  Popup Window AutomationId: {childWindow.Current.AutomationId}");
+                                        //    // Console.WriteLine($"  Popup Window ControlType: {childWindow.Current.ControlType.ProgrammaticName}");
+                                        //    // Console.WriteLine($"  Popup Window ProcessId: {childWindow.Current.ProcessId}");
+
+                                        //    //  FindDataGridViewInChildWindow(childWindow); testing
+
+                                        //    // Console.WriteLine("-------------------------------");
+                                        //}
+                                        // Print the name and other details of each child window
+                                        // Console.WriteLine($"  Popup Window Name: {childWindow.Current.Name}");
+                                        //Console.WriteLine($"  Popup Window AutomationId: {childWindow.Current.AutomationId}");
+                                        // Console.WriteLine($"  Popup Window ControlType: {childWindow.Current.ControlType.ProgrammaticName}");
+                                        // Console.WriteLine($"  Popup Window ProcessId: {childWindow.Current.ProcessId}");
+
+                                        //  FindDataGridViewInChildWindow(childWindow); testing
+
+                                        // Console.WriteLine("-------------------------------");
+                                    }
+
+
+                                }
+                            }
+                                                                    
+                            //// Print the name and other details of each child window
+                            //// Console.WriteLine($"  Popup Window Name: {childWindow.Current.Name}");
+                            ////Console.WriteLine($"  Popup Window AutomationId: {childWindow.Current.AutomationId}");
+                            //// Console.WriteLine($"  Popup Window ControlType: {childWindow.Current.ControlType.ProgrammaticName}");
+                            //// Console.WriteLine($"  Popup Window ProcessId: {childWindow.Current.ProcessId}");
+                            //writeErrorMessage("Program Excuted Start", MAINWindowINSIDE.Current.Name.ToString(), "Page Name");
+                            //if (MAINWindowINSIDE.Current.Name == "Show SPD Compare Result - All SPD Bytes are Identical")
+                            //    rowvalue = FindTablesInChildWindow(MAINWindowINSIDE, Customer_Name);
+                            ////  FindDataGridViewInChildWindow(childWindow); testing
+
+                            //// Console.WriteLine("-------------------------------");
+                        }
+
+
+
+                        ////writeErrorMessage("Program Excuted Start", mainWindow.ToString(), "1");
+                        ////if (mainWindow == null)
+                        ////{
+                        ////    // Console.WriteLine($"Main window '{mainWindowName}' not found.");
+                        ////    return rowvalue;
+                        ////}
+
+                        //try
+                        //{
+                        //    MessageBox.Show(mainWindow.ToString());
+                        //}
+                        //catch (Exception ex)
+                        //{
+                        //    MessageBox.Show(ex.Message.ToString());
+                        //}
+
+                    
+
+                        //writeErrorMessage("Program Excuted Start", "", "2");
+                        //// Create a condition to find any child windows (popups, dialogs, etc.)
+                        //Condition popupCondition = new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Window);
+                        //writeErrorMessage("Program Excuted Start", "", "3");
+                        //// Find all child windows (and descendants) under the main window
+                        //AutomationElementCollection childWindows = mainWindow.FindAll(TreeScope.Descendants, popupCondition);
+                        //writeErrorMessage("Program Excuted Start", childWindows.Count.ToString(), "4");
+                        //if (childWindows.Count == 0)
+                        //{
+                        //    writeErrorMessage("Program Excuted Start", "Child window count zero", "");
+                        //    // Console.WriteLine("No child windows found.");
+                        //}
+                        //else
+                        //{
+                        //    // Console.WriteLine("Found child windows:");
+                        //    writeErrorMessage("Program Excuted Start", "Start Foreach", "");
+                        //    foreach (AutomationElement childWindow in childWindows)
+                        //    {
+                        //        // Print the name and other details of each child window
+                        //        // Console.WriteLine($"  Popup Window Name: {childWindow.Current.Name}");
+                        //        //Console.WriteLine($"  Popup Window AutomationId: {childWindow.Current.AutomationId}");
+                        //        // Console.WriteLine($"  Popup Window ControlType: {childWindow.Current.ControlType.ProgrammaticName}");
+                        //        // Console.WriteLine($"  Popup Window ProcessId: {childWindow.Current.ProcessId}");
+                        //        writeErrorMessage("Program Excuted Start", childWindow.Current.Name.ToString(), "Page Name");
+                        //        if (childWindow.Current.Name == "Show SPD Compare Result - All SPD Bytes are Identical")
+                        //            rowvalue = FindTablesInChildWindow(childWindow, Customer_Name);
+                        //        //  FindDataGridViewInChildWindow(childWindow); testing
+
+                        //        // Console.WriteLine("-------------------------------");
+                        //    }
+                        //}
+
+                        ////Console.ReadLine();
+                    }
+                    catch (Exception ex)
+                    {
+                       // throw ex;
+                        writeErrorMessage(ex.Message.ToString() + Environment.NewLine + ex.StackTrace.ToString(), "Error", serialNumber);
+                    }
+
+                    return rowvalue;
 
                 }
                 else if (Customer_Name == "HITACHI")
@@ -102,7 +255,7 @@ namespace SPD_Write_Bot
                     // Convert serial number to hexadecimal
                     byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(Serial_hexadecimal);
                     string hexString = BitConverter.ToString(byteArray).Replace("-", "");
-                    Console.WriteLine("Hexadecimal representation: " + hexString);
+                   // Console.WriteLine("Hexadecimal representation: " + hexString);
 
                     Hex_1 = hexString.Substring(0, 2); // "00"
                     Hex_2 = hexString.Substring(2, 2);// "0D"
@@ -116,9 +269,55 @@ namespace SPD_Write_Bot
                 {
                       Hex_1, Hex_2, Hex_3, Hex_4, Hex_5, Hex_6, Hex_7,Hex_8
                 };
+                    try
+                    {
+
+                        // Initialize AutomationElement for desktop
+                        AutomationElement desktop = AutomationElement.RootElement;
+
+                        // writeErrorMessage("Program Excuted Start","Check11", "111");
+                        // var desktop1 =  AutomationElement.RootElement;
+                        // Create a condition to find the main window by its name
+                        Condition mainWindowCondition = new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Window);
+                        // writeErrorMessage("Program Excuted Start", "Check1221", "11122");
+                        AutomationElementCollection mainWindow = desktop.FindAll(TreeScope.Children, mainWindowCondition);
+                        // writeErrorMessage("Program Excuted Start", "Check1234341", "111333");
+                        writeErrorMessage(mainWindow.ToString(), "Main Window Count", mainWindow.Count.ToString());
+                        foreach (AutomationElement MAINWindowINSIDE in mainWindow)
+                        {
+                            if (MAINWindowINSIDE.Current.Name.ToString().Contains("DDR4 EZSPD Programmer V1.9.6"))
+                            {
+                                // writeErrorMessage("Child Page Name", MAINWindowINSIDE.Current.Name.ToString(), "");
+                                AutomationElementCollection CHILDWINDOWS = MAINWindowINSIDE.FindAll(TreeScope.Children, mainWindowCondition);
+                                if (CHILDWINDOWS.Count > 0)
+                                {
+                                    // writeErrorMessage("1", CHILDWINDOWS.Count.ToString(), "");
+                                    foreach (AutomationElement CHILDWINDOW in CHILDWINDOWS)
+                                    {
+                                        // writeErrorMessage("SRY", CHILDWINDOW.Current.Name.ToString(), "");
+                                        if (CHILDWINDOW.Current.Name.ToString().Contains("Show SPD Compare Result - All SPD Bytes are Identical"))
+                                        {
+                                            writeErrorMessage("Child window name ", CHILDWINDOW.Current.Name.ToString(), "");
+                                            rowvalue = FindTablesInChildWindow(CHILDWINDOW, Customer_Name);
+                                        }
+
+                                    }
 
 
-                    rowDetails = Start();
+                                }
+                            }
+
+
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // throw ex;
+                        writeErrorMessage(ex.Message.ToString() + Environment.NewLine + ex.StackTrace.ToString(), "Error", serialNumber);
+                    }
+
+                    return rowvalue;
+
                 }
 
                 if (Customer_Name == "BIWIN")
@@ -167,14 +366,65 @@ namespace SPD_Write_Bot
                 {
                       Hex_1, Hex_2, Hex_3, Hex_4
                 };
-                    rowDetails = Start();
+                    //  rowDetails = Start();
+                    try
+                    {
 
+                        // Initialize AutomationElement for desktop
+                        AutomationElement desktop = AutomationElement.RootElement;
+
+                        // writeErrorMessage("Program Excuted Start","Check11", "111");
+                        // var desktop1 =  AutomationElement.RootElement;
+                        // Create a condition to find the main window by its name
+                        Condition mainWindowCondition = new PropertyCondition(AutomationElement.ControlTypeProperty, ControlType.Window);
+                        // writeErrorMessage("Program Excuted Start", "Check1221", "11122");
+                        AutomationElementCollection mainWindow = desktop.FindAll(TreeScope.Children, mainWindowCondition);
+                        // writeErrorMessage("Program Excuted Start", "Check1234341", "111333");
+                        writeErrorMessage(mainWindow.ToString(), "Main Window Count", mainWindow.Count.ToString());
+                        foreach (AutomationElement MAINWindowINSIDE in mainWindow)
+                        {
+                            if (MAINWindowINSIDE.Current.Name.ToString().Contains("DDR4 EZSPD Programmer V1.9.6"))
+                            {
+                                // writeErrorMessage("Child Page Name", MAINWindowINSIDE.Current.Name.ToString(), "");
+                                AutomationElementCollection CHILDWINDOWS = MAINWindowINSIDE.FindAll(TreeScope.Children, mainWindowCondition);
+                                if (CHILDWINDOWS.Count > 0)
+                                {
+                                    // writeErrorMessage("1", CHILDWINDOWS.Count.ToString(), "");
+                                    foreach (AutomationElement CHILDWINDOW in CHILDWINDOWS)
+                                    {
+                                        // writeErrorMessage("SRY", CHILDWINDOW.Current.Name.ToString(), "");
+                                        if (CHILDWINDOW.Current.Name.ToString().Contains("Show SPD Compare Result - All SPD Bytes are Identical"))
+                                        {
+                                            writeErrorMessage("Child window name ", CHILDWINDOW.Current.Name.ToString(), "");
+                                            rowvalue = FindTablesInChildWindow(CHILDWINDOW, Customer_Name);
+                                        }
+
+                                    }
+
+
+                                }
+                            }
+
+
+                        }
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        // throw ex;
+                        writeErrorMessage(ex.Message.ToString() + Environment.NewLine + ex.StackTrace.ToString(), "Error", serialNumber);
+                    }
+
+                    return rowvalue;
 
                 }
             }
+
             catch(Exception ex)
             {
                 throw ex;
+                writeErrorMessage(ex.Message.ToString(), "Error", Ser_Number);
             }
             return rowDetails;
         }
@@ -182,6 +432,7 @@ namespace SPD_Write_Bot
         // Instance method to start the process
         public genclass Start()
         {
+            writeErrorMessage("Program Excuted Start", "Start Enter", "");
             var rowvalue=new genclass();
             try
             {
@@ -193,7 +444,7 @@ namespace SPD_Write_Bot
 
                 if (mainWindow == null)
                 {
-                    Console.WriteLine($"Main window '{mainWindowName}' not found.");
+                   // Console.WriteLine($"Main window '{mainWindowName}' not found.");
                     return rowvalue;
                 }
 
@@ -205,24 +456,25 @@ namespace SPD_Write_Bot
 
                 if (childWindows.Count == 0)
                 {
-                    Console.WriteLine("No child windows found.");
+                   // Console.WriteLine("No child windows found.");
                 }
                 else
                 {
-                    Console.WriteLine("Found child windows:");
-
+                    // Console.WriteLine("Found child windows:");
+                    writeErrorMessage("Program Excuted Start", "Start Foreach", "");
                     foreach (AutomationElement childWindow in childWindows)
                     {
                         // Print the name and other details of each child window
-                        Console.WriteLine($"  Popup Window Name: {childWindow.Current.Name}");
-                        Console.WriteLine($"  Popup Window AutomationId: {childWindow.Current.AutomationId}");
-                        Console.WriteLine($"  Popup Window ControlType: {childWindow.Current.ControlType.ProgrammaticName}");
-                        Console.WriteLine($"  Popup Window ProcessId: {childWindow.Current.ProcessId}");
+                        // Console.WriteLine($"  Popup Window Name: {childWindow.Current.Name}");
+                        //Console.WriteLine($"  Popup Window AutomationId: {childWindow.Current.AutomationId}");
+                        // Console.WriteLine($"  Popup Window ControlType: {childWindow.Current.ControlType.ProgrammaticName}");
+                        // Console.WriteLine($"  Popup Window ProcessId: {childWindow.Current.ProcessId}");
+                        writeErrorMessage("Program Excuted Start", childWindow.Current.Name.ToString(), "Page Name");
                         if (childWindow.Current.Name == "Show SPD Compare Result - All SPD Bytes are Identical")
                             rowvalue = FindTablesInChildWindow(childWindow, Customer_Name);
                         //  FindDataGridViewInChildWindow(childWindow); testing
 
-                        Console.WriteLine("-------------------------------");
+                       // Console.WriteLine("-------------------------------");
                     }
                 }
 
@@ -231,6 +483,7 @@ namespace SPD_Write_Bot
             catch(Exception ex)
             {
                 throw ex;
+                writeErrorMessage(ex.Message.ToString(), "Error", serialNumber);
             }
 
             return rowvalue;
@@ -239,6 +492,7 @@ namespace SPD_Write_Bot
         // Instance method to find tables or custom controls inside a child window
         public genclass FindTablesInChildWindow(AutomationElement childWindow, string Customer_Name)
         {
+            writeErrorMessage("jAMMM", "FindTablesInChildWindow", "");
             var row_Details=new genclass();
             try
             {
@@ -258,7 +512,7 @@ namespace SPD_Write_Bot
                 else
                 {
                     Console.WriteLine("  Found table-like controls in this child window:");
-
+                    writeErrorMessage("Program Excuted Start", "FindTablesInChildWindow", "ForEach");
                     foreach (AutomationElement tableControl in tableControls)
                     {
                         Console.WriteLine($"    Table-like Control Name: {tableControl.Current.Name}");
@@ -266,6 +520,7 @@ namespace SPD_Write_Bot
                         Console.WriteLine($"    Control Type: {tableControl.Current.ControlType.ProgrammaticName}");
 
                         // Now check if this control implements any relevant patterns like GridPattern
+                        writeErrorMessage("Program Excuted Start", "FindTablesInChildWindow" + Customer_Name.ToString(), "Table Control");
                         row_Details = CheckForGridPattern(tableControl, Customer_Name);
                     }
                 }
@@ -273,6 +528,7 @@ namespace SPD_Write_Bot
             catch (Exception ex)
             {
                 throw ex;
+                writeErrorMessage(ex.Message.ToString(), "Error", serialNumber);
             }
             
             return row_Details;
@@ -281,6 +537,7 @@ namespace SPD_Write_Bot
         // Instance method to check if the control implements GridPattern or TablePattern
         public genclass CheckForGridPattern(AutomationElement element, String Customer_Name)
         {
+            writeErrorMessage("Program Excuted Start", "CheckForGridPattern" + Customer_Name.ToString(), "");
             var rowDetails = new RowDetails();
             genclass objentry = new genclass();
             try
@@ -334,7 +591,7 @@ namespace SPD_Write_Bot
                                         if (row < column2Values.Count && row < column3Values.Count)
                                         {
                                             // rowValuesInRange[row] = (column2Values[row], column3Values[row]);
-                                            lstvalues.Add(new EntryDetails { bytsEntry = row, ExpectedValue = column2Values[row].ToString(), OriginalValue = column3Values[row].ToString() });
+                                            lstvalues.Add(new EntryDetails { RowNumber = row, Expected = column2Values[row].ToString(), TableValue = column3Values[row].ToString() });
                                         }
                                     }
                                     if (row >= 353 && row <= 360)
@@ -343,7 +600,7 @@ namespace SPD_Write_Bot
                                         if (row < column2Values.Count && row < column3Values.Count)
                                         {
                                             // rowValuesInRange_Hex[row] = (column2Values[row].ToString(), column3Values[row].ToString());
-                                            lsthexvalues.Add(new HexDetails { bytshexvalue = row, ExpectedValuehex = column2Values[row].ToString(), hexoriginalvalues = column3Values[row].ToString() });
+                                            lsthexvalues.Add(new HexDetails { RowNumber = row, Expected = column2Values[row].ToString(), TableValue = column3Values[row].ToString() });
                                         }
                                     }
                                 }
@@ -355,7 +612,7 @@ namespace SPD_Write_Bot
                                         if (row < column2Values.Count && row < column3Values.Count)
                                         {
                                            // rowValuesInRange[row] = (column2Values[row], column3Values[row]);
-                                            lstvalues.Add(new EntryDetails { bytsEntry = row, ExpectedValue = column2Values[row].ToString(), OriginalValue = column3Values[row].ToString() });
+                                            lstvalues.Add(new EntryDetails { RowNumber = row, Expected = column2Values[row].ToString(), TableValue = column3Values[row].ToString() });
 
                                         }
                                     }
@@ -365,7 +622,7 @@ namespace SPD_Write_Bot
                                         if (row < column2Values.Count && row < column3Values.Count)
                                         {
                                            // rowValuesInRange_Hex[row] = (column2Values[row], column3Values[row]);
-                                            lsthexvalues.Add(new HexDetails { bytshexvalue = row, ExpectedValuehex = column2Values[row].ToString(), hexoriginalvalues = column3Values[row].ToString() });
+                                            lsthexvalues.Add(new HexDetails { RowNumber = row, Expected = column2Values[row].ToString(), TableValue = column3Values[row].ToString() });
                                         }
 
                                        
@@ -379,7 +636,7 @@ namespace SPD_Write_Bot
                                         if (row < column2Values.Count && row < column3Values.Count)
                                         {
                                             //  rowValuesInRange[row] = (column2Values[row], column3Values[row]);
-                                            lstvalues.Add(new EntryDetails { bytsEntry = row, ExpectedValue = column2Values[row].ToString(), OriginalValue = column3Values[row].ToString() });
+                                            lstvalues.Add(new EntryDetails { RowNumber = row, Expected = column2Values[row].ToString(), TableValue = column3Values[row].ToString() });
                                         }
                                     }
                                     if (row >= 353 && row <= 366)
@@ -388,7 +645,7 @@ namespace SPD_Write_Bot
                                         if (row < column2Values.Count && row < column3Values.Count)
                                         {
                                             //  rowValuesInRange_Hex[row] = (column2Values[row], column3Values[row]);
-                                            lsthexvalues.Add(new HexDetails { bytshexvalue = row, ExpectedValuehex = column2Values[row].ToString(), hexoriginalvalues = column3Values[row].ToString() });
+                                            lsthexvalues.Add(new HexDetails { RowNumber = row, Expected = column2Values[row].ToString(), TableValue = column3Values[row].ToString() });
                                         }
                                     }
                                 }
@@ -408,7 +665,7 @@ namespace SPD_Write_Bot
                     }
                     //  rowDetails.ramvalue = rowValuesInRange;
                     // rowDetails.hexvalue = rowValuesInRange_Hex;
-
+                    writeErrorMessage("Program Excuted Start", lstvalues.Count.ToString() + lsthexvalues.ToString(), "");
                     objentry.entries=lstvalues;
                     objentry.hexDetails = lsthexvalues;
                     // Example: Perform comparison between values of column 2 and column 3
@@ -417,14 +674,16 @@ namespace SPD_Write_Bot
                 }
                 else
                 {
-                    Console.WriteLine($"    GridPattern not found for this element.");
-                    //-----MessageBox.Show("GridPattern not found for this element.");//
+                   
+                   // Console.WriteLine($"    GridPattern not found for this element.");
+                    MessageBox.Show("GridPattern not found for this element.");//
                 }
             }
             catch(Exception ex)
             {
                 throw ex;
-            }
+                writeErrorMessage(ex.Message.ToString(), "Error", serialNumber);
+            }   
             return objentry;
 
         }
@@ -483,7 +742,7 @@ namespace SPD_Write_Bot
             // If all values are the same, call the empty function
             if (allValuesSame)
             {
-                Console.WriteLine("All values are the same. Calling function...");
+               // Console.WriteLine("All values are the same. Calling function...");
                 CallFunction(serialNumbers, HexaNumbers, rowValuesInRange, Customer_Name); ;  // Call the function when all values are the same
             }
             else
@@ -491,14 +750,14 @@ namespace SPD_Write_Bot
                 // Only call the function once if differences were detected in the range 325–360
                 if (anyDifferencesInRange)
                 {
-                    Console.WriteLine($"    Values are different in the range between 325 and 360. Calling function...");
+                   // Console.WriteLine($"    Values are different in the range between 325 and 360. Calling function...");
                     CallFunction(serialNumbers, HexaNumbers, rowValuesInRange, Customer_Name); ;  // Call the function after checking the range
                 }
                 else
                 {
                     // If differences were detected, but the row was outside the 325–360 range
-                    Console.WriteLine("    Board is not pass. No values found in the range 325 to 360.");
-                    MessageBox.Show("Differences were found in the SerialNUmbers 325 to 360");
+                   // Console.WriteLine("    Board is not pass. No values found in the range 325 to 360.");
+                   // MessageBox.Show("Differences were found in the SerialNUmbers 325 to 360");
                 }
             }
 
@@ -507,15 +766,15 @@ namespace SPD_Write_Bot
         // Instance method to call when certain conditions are met
         public void CallFunction(List<string> serialNumbers, List<string> HexaNumbers, Dictionary<int, (string column2Value, string column3Value)> rowValuesInRange, string Customer_Name)
         {
-            Console.WriteLine("    Function called.");
+           // Console.WriteLine("    Function called.");
 
             // Print out the serial numbers and hexadecimal values
             if (Customer_Name == "ESSENCORE" || Customer_Name == "HITACHI")
             {
-                Console.WriteLine("    Serial Numbers: " + string.Join(", ", serialNumbers));
+               // Console.WriteLine("    Serial Numbers: " + string.Join(", ", serialNumbers));
             }
 
-            Console.WriteLine("    Hexadecimal Numbers: " + string.Join(", ", HexaNumbers));
+           // Console.WriteLine("    Hexadecimal Numbers: " + string.Join(", ", HexaNumbers));
 
             // Define expected values for each row and column2Value (in terms of serials and hexadecimals)
             Dictionary<int, string> expectedValues = new Dictionary<int, string>();
@@ -585,17 +844,17 @@ namespace SPD_Write_Bot
                     // Compare the actual col3Value with the expected value
                     if (col3Value == expectedValues[rowNumber])
                     {
-                        Console.WriteLine($"Row {rowNumber}: Value matches expected value.");
+                       // Console.WriteLine($"Row {rowNumber}: Value matches expected value.");
                     }
                     else
                     {
-                        Console.WriteLine($"Row {rowNumber}: Value mismatch! Expected {expectedValues[rowNumber]}, but found {col3Value}.");
+                       // Console.WriteLine($"Row {rowNumber}: Value mismatch! Expected {expectedValues[rowNumber]}, but found {col3Value}.");
                         allValuesMatch = false;  // Set the flag to false if there's a mismatch
                     }
                 }
                 else
                 {
-                    Console.WriteLine($"Row {rowNumber}: No expected value defined for this row.");
+                   // Console.WriteLine($"Row {rowNumber}: No expected value defined for this row.");
                     //allValuesMatch = false;  // Set the flag to false if there's no expected value for this row
                 }
             }
@@ -603,13 +862,13 @@ namespace SPD_Write_Bot
             // After checking all rows, display the board pass/fail result
             if (allValuesMatch)
             {
-                Console.WriteLine("Board Pass: All conditions checked and passed.");
+              //  Console.WriteLine("Board Pass: All conditions checked and passed.");
                 MessageBox.Show("Board Pass:All conditions checked and passed");
 
             }
             else
             {
-                Console.WriteLine("Board Fail: One or more conditions failed.");
+               // Console.WriteLine("Board Fail: One or more conditions failed.");
                 MessageBox.Show("Board Fail: One or more conditions failed.");
             }
         }
@@ -626,21 +885,45 @@ namespace SPD_Write_Bot
 
             if (customControls.Count == 0)
             {
-                Console.WriteLine("  No custom controls found in this child window.");
+              //  Console.WriteLine("  No custom controls found in this child window.");
             }
             else
             {
-                Console.WriteLine("  Found custom controls in this child window:");
+               // Console.WriteLine("  Found custom controls in this child window:");
 
 
                 foreach (AutomationElement customControl in customControls)
                 {
-                    Console.WriteLine($"    Custom Control Name: {customControl.Current.Name}");
+                   // Console.WriteLine($"    Custom Control Name: {customControl.Current.Name}");
                 }
             }
         }
 
+        public void writeErrorMessage(string errorMessage, string functionName, string Serialnumber)
+        {
+            // Ensure the directory exists
+            string systemPath = Error_filepath;
+            if (!Directory.Exists(systemPath))
+            {
+                Directory.CreateDirectory(systemPath);
+            }
 
+            // Prepare log file path
+            string currentDate = DateTime.Now.ToString("dd-MM-yyyy");
+            string errorLogFileName = $"ErrorLog_{currentDate}.txt";
+            string errorLogPath = Path.Combine(systemPath, errorLogFileName);
+
+            // Write to log file
+            using (StreamWriter errLogs = new StreamWriter(errorLogPath, true))
+            {
+                errLogs.WriteLine("--------------------------------------------------------------------------------------------------------------------" + Environment.NewLine);
+                errLogs.WriteLine("---------------------------------------------------" + DateTime.Now + "----------------------------------------------" + Environment.NewLine);
+                errLogs.WriteLine($"Log Message: {errorMessage}" + Environment.NewLine);
+                errLogs.WriteLine($"Product Type: {functionName}" + Environment.NewLine);
+                errLogs.WriteLine($"Serial Number: {Serialnumber}");
+                errLogs.Close();
+            }
+        }
 
 
 

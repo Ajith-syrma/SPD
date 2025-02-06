@@ -60,6 +60,7 @@ namespace SPD_Write_Bot
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label2 = new System.Windows.Forms.Label();
             this.lbl_App_ver = new System.Windows.Forms.Label();
+            this.chk_lbl = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -148,6 +149,7 @@ namespace SPD_Write_Bot
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.DarkSeaGreen;
+            this.panel2.Controls.Add(this.chk_lbl);
             this.panel2.Controls.Add(this.label3);
             this.panel2.Controls.Add(this.lbl_Filepath);
             this.panel2.Controls.Add(this.lbl_Path);
@@ -432,6 +434,17 @@ namespace SPD_Write_Bot
             this.lbl_App_ver.Text = "1.0.0";
             this.lbl_App_ver.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // chk_lbl
+            // 
+            this.chk_lbl.AutoSize = true;
+            this.chk_lbl.BackColor = System.Drawing.Color.DarkSeaGreen;
+            this.chk_lbl.Font = new System.Drawing.Font("Comic Sans MS", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chk_lbl.ForeColor = System.Drawing.Color.Black;
+            this.chk_lbl.Location = new System.Drawing.Point(404, 132);
+            this.chk_lbl.Name = "chk_lbl";
+            this.chk_lbl.Size = new System.Drawing.Size(0, 19);
+            this.chk_lbl.TabIndex = 19;
+            // 
             // SPD
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -498,6 +511,7 @@ namespace SPD_Write_Bot
         private System.Windows.Forms.Label lbl_Path;
         private System.Windows.Forms.Label lbl_App_ver;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label chk_lbl;
     }
 }
 

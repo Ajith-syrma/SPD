@@ -38,35 +38,42 @@
             // 
             // dgvEntryValue
             // 
+            this.dgvEntryValue.AllowUserToDeleteRows = false;
             this.dgvEntryValue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvEntryValue.Location = new System.Drawing.Point(17, 32);
             this.dgvEntryValue.Name = "dgvEntryValue";
-            this.dgvEntryValue.Size = new System.Drawing.Size(346, 180);
+            this.dgvEntryValue.ReadOnly = true;
+            this.dgvEntryValue.Size = new System.Drawing.Size(358, 176);
             this.dgvEntryValue.TabIndex = 0;
             // 
             // dgvHexValue
             // 
+            this.dgvHexValue.AllowUserToAddRows = false;
+            this.dgvHexValue.AllowUserToDeleteRows = false;
             this.dgvHexValue.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvHexValue.Location = new System.Drawing.Point(12, 227);
             this.dgvHexValue.Name = "dgvHexValue";
-            this.dgvHexValue.Size = new System.Drawing.Size(351, 296);
+            this.dgvHexValue.ReadOnly = true;
+            this.dgvHexValue.Size = new System.Drawing.Size(363, 340);
             this.dgvHexValue.TabIndex = 1;
             // 
             // Customer_Name
             // 
             this.Customer_Name.AutoSize = true;
+            this.Customer_Name.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Customer_Name.Location = new System.Drawing.Point(14, 9);
             this.Customer_Name.Name = "Customer_Name";
-            this.Customer_Name.Size = new System.Drawing.Size(85, 13);
+            this.Customer_Name.Size = new System.Drawing.Size(121, 16);
             this.Customer_Name.TabIndex = 2;
             this.Customer_Name.Text = "Customer_Name";
             // 
             // Serial_Number
             // 
             this.Serial_Number.AutoSize = true;
-            this.Serial_Number.Location = new System.Drawing.Point(150, 9);
+            this.Serial_Number.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Serial_Number.Location = new System.Drawing.Point(160, 9);
             this.Serial_Number.Name = "Serial_Number";
-            this.Serial_Number.Size = new System.Drawing.Size(76, 13);
+            this.Serial_Number.Size = new System.Drawing.Size(110, 16);
             this.Serial_Number.TabIndex = 3;
             this.Serial_Number.Text = "Serial_Number";
             // 
@@ -74,7 +81,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(400, 535);
+            this.ClientSize = new System.Drawing.Size(405, 579);
             this.Controls.Add(this.Serial_Number);
             this.Controls.Add(this.Customer_Name);
             this.Controls.Add(this.dgvHexValue);
