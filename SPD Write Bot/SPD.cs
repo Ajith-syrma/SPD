@@ -42,8 +42,8 @@ namespace SPD_Write_Bot
         public string input,data;
         public string PCB_ID;
         // Connection string for SQL Server
-        //public string conn_str1 = "Data Source=192.168.1.181;Initial Catalog=SFCS;User ID=sa;Password=Syrma@2022;MultipleActiveResultSets=true";
-        public String conn_str1 = "Data Source=192.168.1.183;Initial Catalog=DIVYA;User ID=Dhivya;Password=1996Divya;MultipleActiveResultSets=True";
+        public string conn_str1 = "Data Source=192.168.1.181;Initial Catalog=SFCS;User ID=sa;Password=Syrma@2022;MultipleActiveResultSets=true";
+       // public String conn_str1 = "Data Source=192.168.1.183;Initial Catalog=DIVYA;User ID=Dhivya;Password=1996Divya;MultipleActiveResultSets=True";
         public SqlConnection cnn;
         public SqlCommand cmd;
         public string Resol;
@@ -793,11 +793,11 @@ namespace SPD_Write_Bot
                 // Serial number text box click
                  SimulateLeftMouseClick(660, 355);
                  Thread.Sleep(100);
-                SimulateLeftMouseClick(678, 355);
-                Thread.Sleep(100);
+                //SimulateLeftMouseClick(678, 355);
+                //Thread.Sleep(100);
 
-                SimulateLeftMouseClick(678, 355);
-                Thread.Sleep(100);
+                //SimulateLeftMouseClick(678, 355);
+                //Thread.Sleep(100);
 
                 ////1.Write SPD DATA to Module buttClick 378,124.
                 //SimulateLeftMouseClick(375, 120);
@@ -1145,14 +1145,14 @@ namespace SPD_Write_Bot
                     // SimulateLeftMouseClick(914, 641);
                     // Thread.Sleep(100);
                     //EnableMouse(true);
-                    foreach (Form form in Application.OpenForms)
-                    {
-                        if (form is ResultDisplay)
-                        {
-                            form.Close();
-                            break;
-                        }
-                    }
+                    //foreach (Form form in Application.OpenForms)
+                    //{
+                    //    if (form is ResultDisplay)
+                    //    {
+                    //        form.Close();
+                    //        break;
+                    //    }
+                    //}
                     Thread.Sleep(3000);
                     rowDetails = clsTableValue.Program(customer_name, serial_number);
                    
@@ -1258,7 +1258,7 @@ namespace SPD_Write_Bot
 
                 // Write SPD DATA to Module button click
                 SimulateLeftMouseClick(375, 125);
-                Thread.Sleep(1500);
+                Thread.Sleep(500);
 
                // textBox1.Text = "Config value";
 
@@ -1316,10 +1316,10 @@ namespace SPD_Write_Bot
                 Thread.Sleep(100);
               
                 SendKeys.SendWait(dec_serial);
-                Thread.Sleep(100);
+                Thread.Sleep(500);
 
                 SimulateLeftMouseClick(645, 501);
-                Thread.Sleep(100);
+                Thread.Sleep(500);
 
                 // OK button click
                 SimulateLeftMouseClick(855, 395);
@@ -1365,7 +1365,7 @@ namespace SPD_Write_Bot
                 SimulateLeftMouseClick(780, 380);
                 Thread.Sleep(100);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(200);
                 SendKeys.SendWait(year.ToString().Substring(2, 2));
                 Thread.Sleep(500);
 
@@ -1375,7 +1375,7 @@ namespace SPD_Write_Bot
                 SimulateLeftMouseClick(780, 410);
                 Thread.Sleep(100);
                 SendKeys.SendWait("{BACKSPACE}");
-                Thread.Sleep(100);
+                Thread.Sleep(200);
                 SendKeys.SendWait(weekNumber.ToString());
                 Thread.Sleep(500);
 
@@ -1389,7 +1389,7 @@ namespace SPD_Write_Bot
 
                 // Edit SPD DATA button click
                 SimulateLeftMouseClick(680, 380);
-                Thread.Sleep(100);
+                Thread.Sleep(500);
 
                 // Jump to Text button click
                 SimulateLeftMouseClick(530, 551);
@@ -1512,15 +1512,15 @@ namespace SPD_Write_Bot
 
                     //Result Button Click
                     SimulateLeftMouseClick(683, 441);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(2000);
 
                     //compare icon ClickS
                     SimulateLeftMouseClick(305, 123);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(2000);
 
                     //alert message ok button Click
                     SimulateLeftMouseClick(698, 416);
-                    Thread.Sleep(1000);
+                    Thread.Sleep(2000);
                     TableValue table = new TableValue();
                     //buffer value and o0riginal value campare ok button Click
                     //  SimulateLeftMouseClick(914, 641);
@@ -1930,14 +1930,7 @@ namespace SPD_Write_Bot
                     SimulateLeftMouseClick(698, 416);
                     Thread.Sleep(1000);
                     EnableMouse(true);
-                    foreach (Form form in Application.OpenForms)
-                    {
-                        if (form is ResultDisplay)
-                        {
-                            form.Close();
-                            break;
-                        }
-                    }
+                   
                     rowDetails =  clsTableValue.Program(customer_name,serial_number);
                     ResultDisplay resultdisplay = new ResultDisplay(rowDetails, customer_name, serial_number);
                     resultdisplay.StartPosition = FormStartPosition.Manual;
@@ -2035,6 +2028,20 @@ namespace SPD_Write_Bot
             {
                 if (e.KeyCode == Keys.Enter)
                 {
+                   ResultDisplay rsdisplay=new ResultDisplay(rowDetails,string.Empty,string.Empty);
+                    foreach (Form form in Application.OpenForms)
+                    {
+                        if (form is ResultDisplay)
+                        {
+                            form.Close();
+                            break;
+                        }
+                    }
+                    //if (rsdisplay != null)
+                    //{
+                    //    rsdisplay.Close();
+                    //}
+
                     Clipboard.Clear();
 
                     //NetworkPath = lbl_Filepath.Text;
