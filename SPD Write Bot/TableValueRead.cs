@@ -20,6 +20,7 @@ namespace SPD_Write_Bot
         public List<string> HexaNumbers;
         public string Error_filepath = ConfigurationManager.AppSettings["FilePath1"];
         genclass rowvalue = new genclass();
+       // bool spdpage=false;
 
         // Constructor to initialize instance fields
         public genclass Program(string Cus_Name,string Ser_Number)
@@ -85,7 +86,8 @@ namespace SPD_Write_Bot
                   
                     try
                     {
-
+                        //if (rowDetails != null)
+                        //    rowDetails = null;
                         // Initialize AutomationElement for desktop
                         AutomationElement desktop = AutomationElement.RootElement;
                        
@@ -109,10 +111,25 @@ namespace SPD_Write_Bot
                                     foreach (AutomationElement CHILDWINDOW in CHILDWINDOWS)
                                     {
                                        // writeErrorMessage("SRY", CHILDWINDOW.Current.Name.ToString(), "");
-                                        if (CHILDWINDOW.Current.Name.ToString().Contains("Show SPD Compare Result - All SPD Bytes are Identical"))
+                                        if (CHILDWINDOW.Current.Name.ToString() == "Show SPD Compare Result - All SPD Bytes are Identical")
                                         {
                                             writeErrorMessage("Child window name ", CHILDWINDOW.Current.Name.ToString(), "");
                                             rowvalue = FindTablesInChildWindow(CHILDWINDOW, Customer_Name);
+                                            //if (rowvalue == null)
+                                            //{
+                                            //    spdpage = false;
+                                            //}
+                                            //else if (rowvalue != null && rowvalue.hexDetails.Count > 0 && rowvalue.entries.Count > 0)
+                                            //{
+                                            //    spdpage = true;
+                                            //    rowvalue.spdPAGE = spdpage;
+                                            //}
+                                            //else
+                                            //{
+                                            //    spdpage = false;
+                                            //}
+
+                                            break;
                                         }                                       
                                         //    AutomationElementCollection CHILDWINDOWSinside = CHILDWINDOW.FindAll(TreeScope.Children, mainWindowCondition);
                                         //writeErrorMessage("Child Page Name", CHILDWINDOW.Current.Name.ToString(), "");
@@ -218,7 +235,8 @@ namespace SPD_Write_Bot
                     }
                     catch (Exception ex)
                     {
-                       // throw ex;
+                      
+                        rowvalue = null;
                         writeErrorMessage(ex.Message.ToString() + Environment.NewLine + ex.StackTrace.ToString(), "Error", serialNumber);
                     }
 
@@ -299,6 +317,12 @@ namespace SPD_Write_Bot
                                         {
                                             writeErrorMessage("Child window name ", CHILDWINDOW.Current.Name.ToString(), "");
                                             rowvalue = FindTablesInChildWindow(CHILDWINDOW, Customer_Name);
+                                            //if (rowvalue == null)
+                                            //    spdpage = false;
+                                            //else if (rowvalue != null)
+                                            //    spdpage = true;
+
+                                            break;
                                         }
 
                                     }
@@ -313,6 +337,7 @@ namespace SPD_Write_Bot
                     catch (Exception ex)
                     {
                         // throw ex;
+                        rowvalue = null;
                         writeErrorMessage(ex.Message.ToString() + Environment.NewLine + ex.StackTrace.ToString(), "Error", serialNumber);
                     }
 
@@ -369,7 +394,7 @@ namespace SPD_Write_Bot
                     //  rowDetails = Start();
                     try
                     {
-
+                        rowvalue = new genclass();
                         // Initialize AutomationElement for desktop
                         AutomationElement desktop = AutomationElement.RootElement;
 
@@ -397,6 +422,12 @@ namespace SPD_Write_Bot
                                         {
                                             writeErrorMessage("Child window name ", CHILDWINDOW.Current.Name.ToString(), "");
                                             rowvalue = FindTablesInChildWindow(CHILDWINDOW, Customer_Name);
+                                            //if (rowvalue == null)
+                                            //    spdpage = false;
+                                            //else if (rowvalue != null)
+                                            //    spdpage = true;
+
+                                            break;
                                         }
 
                                     }
@@ -413,6 +444,7 @@ namespace SPD_Write_Bot
                     catch (Exception ex)
                     {
                         // throw ex;
+                        rowvalue = null;
                         writeErrorMessage(ex.Message.ToString() + Environment.NewLine + ex.StackTrace.ToString(), "Error", serialNumber);
                     }
 
@@ -423,7 +455,8 @@ namespace SPD_Write_Bot
 
             catch(Exception ex)
             {
-                throw ex;
+                // throw ex;
+                rowvalue = null;
                 writeErrorMessage(ex.Message.ToString(), "Error", Ser_Number);
             }
             return rowDetails;
@@ -482,8 +515,9 @@ namespace SPD_Write_Bot
             }
             catch(Exception ex)
             {
-                throw ex;
+                rowvalue = null;
                 writeErrorMessage(ex.Message.ToString(), "Error", serialNumber);
+                
             }
 
             return rowvalue;
@@ -527,8 +561,9 @@ namespace SPD_Write_Bot
             }
             catch (Exception ex)
             {
-                throw ex;
+                row_Details = null;
                 writeErrorMessage(ex.Message.ToString(), "Error", serialNumber);
+                
             }
             
             return row_Details;
@@ -674,14 +709,15 @@ namespace SPD_Write_Bot
                 }
                 else
                 {
-                   
-                   // Console.WriteLine($"    GridPattern not found for this element.");
+
+                    // Console.WriteLine($"    GridPattern not found for this element.");
+                    objentry = null;
                     MessageBox.Show("GridPattern not found for this element.");//
                 }
             }
             catch(Exception ex)
             {
-                throw ex;
+                objentry = null;
                 writeErrorMessage(ex.Message.ToString(), "Error", serialNumber);
             }   
             return objentry;
