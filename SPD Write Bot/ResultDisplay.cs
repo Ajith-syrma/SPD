@@ -28,6 +28,7 @@ namespace SPD_Write_Bot
             this.Serial_Number.Text = serial_number;    
             this.Customer_Name.Text = customer_name;
             this.rowdetails = rowDetails;
+
         }
 
         private void ResultDisplay_Load(object sender, EventArgs e)
@@ -38,6 +39,9 @@ namespace SPD_Write_Bot
             EntryDetails entryDetails;
             HexDetails hexDetails;
             //int i = 10;
+            dgvEntryValue.DataSource = null;
+            dgvHexValue.DataSource = null;
+
             try
             {
                 if (rowdetails != null)
@@ -61,6 +65,11 @@ namespace SPD_Write_Bot
                         return;
                     }
                 }
+                else
+                {
+                    MessageBox.Show("value Empty");
+                    return;
+                }
 
                 if (rowdetails.hexDetails != null)
                 {
@@ -83,6 +92,7 @@ namespace SPD_Write_Bot
                     return;
                 }
             }
+
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message.ToString());

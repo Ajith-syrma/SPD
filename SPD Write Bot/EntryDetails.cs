@@ -24,5 +24,6 @@ namespace SPD_Write_Bot
     {
         public List<EntryDetails> entries { get; set; }
         public List<HexDetails> hexDetails { get; set; }
+        public bool spdPAGE { get; set; }
     }
 }

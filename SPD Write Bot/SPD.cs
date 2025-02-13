@@ -1179,6 +1179,7 @@ namespace SPD_Write_Bot
             }
             catch (Exception ex)
             {
+                rowDetails = null;
                 result = $"Error: {ex.Message}";
             }
             finally
@@ -1187,9 +1188,12 @@ namespace SPD_Write_Bot
 
             }
             // Ensure the database connection is closed even if an error occurs
+            try
+            { 
             if (cnn.State == ConnectionState.Open) cnn.Close();
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO SPD_PROG_Log VALUES (@Customer, @FG, @Model,@PCBA_ID,@Capacity, @Frequency, @Version, @Release, @Part, @Result, @ServerDateTime, HOST_NAME(), @Running_Converse, @SPD_Value, @File_Path, @System_Datetime, '')", cnn);
+            cmd = new SqlCommand("pro_SPD_Write_Bot", cnn);
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@Customer", cbm_Cus.Text);
             cmd.Parameters.AddWithValue("@FG", cbm_FG.Text);
             cmd.Parameters.AddWithValue("@Model", lbl_Model.Text);
@@ -1215,7 +1219,13 @@ namespace SPD_Write_Bot
             //cmd.ExecuteNonQuery();
             //cnn.Close();
             SPD_Value = "";
-            
+            }
+            catch (Exception ex)
+            {
+                rowDetails = null;
+                MessageBox.Show("Db Not Connected", ex.Message.ToString());
+                writeErrorMessage("DB not connected", "", "", "SPD page", ex.Message.ToString(), "SPD");
+            }
         }
         public string BotStart4(string serial_number, string customer_name)
         {
@@ -1542,13 +1552,18 @@ namespace SPD_Write_Bot
                     ResultDisplay resultdisplay = new ResultDisplay(rowDetails, customer_name, serial_number);
                     Thread.Sleep(100);
                     table.writeErrorMessage(rowDetails.entries.Count() + "-" + rowDetails.hexDetails.Count(), customer_name.ToString(), serial_number.ToString());
-                    resultdisplay.StartPosition = FormStartPosition.Manual;
-                    resultdisplay.WindowState = FormWindowState.Normal;
-                    resultdisplay.Location = new Point(0, 100);
-                    resultdisplay.Show();
-                   // resultdisplay.BringToFront();
-                    resultdisplay.Activate();
-
+                    if (rowDetails != null)
+                    {
+                        if (rowDetails.entries.Count() > 0 && rowDetails.hexDetails.Count > 0)
+                        {
+                            resultdisplay.StartPosition = FormStartPosition.Manual;
+                            resultdisplay.WindowState = FormWindowState.Normal;
+                            resultdisplay.Location = new Point(0, 100);
+                            resultdisplay.Show();
+                            // resultdisplay.BringToFront();
+                            resultdisplay.Activate();
+                        }
+                    }
 
                     textBox1.Clear();
                     textBox1.Select();
@@ -1575,31 +1590,39 @@ namespace SPD_Write_Bot
              
             }
             // Ensure the database connection is closed even if an error occurs
-         
-            if (cnn.State == ConnectionState.Open) cnn.Close();
+            try
+            {
+                if (cnn.State == ConnectionState.Open) cnn.Close();
 
-            cmd = new SqlCommand("pro_SPD_Write_Bot",cnn);
-            cmd.CommandType= CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@Customer", cbm_Cus.Text);
-            cmd.Parameters.AddWithValue("@FG", cbm_FG.Text);
-            cmd.Parameters.AddWithValue("@Model", lbl_Model.Text);
-            cmd.Parameters.AddWithValue("@PCBA_ID", PCB_ID);
-            cmd.Parameters.AddWithValue("@Capacity", lbl_capacity.Text);
-            cmd.Parameters.AddWithValue("@Frequency", Frequence.Text);
-            cmd.Parameters.AddWithValue("@Version", lbl_Ver.Text);
-            cmd.Parameters.AddWithValue("@Release", lbl_Release.Text);
-            cmd.Parameters.AddWithValue("@Part", lbl_Part.Text);
-            cmd.Parameters.AddWithValue("@Result", result);
-            cmd.Parameters.AddWithValue("@ServerDateTime", server_datetime);
-            cmd.Parameters.AddWithValue("@Running_Converse", combinedValue);
-            cmd.Parameters.AddWithValue("@SPD_Value", SPD_Value);
-            cmd.Parameters.AddWithValue("@File_Path", lbl_Filepath.Text);
-            cmd.Parameters.AddWithValue("@System_Datetime", system_datetime);
+                cmd = new SqlCommand("pro_SPD_Write_Bot", cnn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Customer", cbm_Cus.Text);
+                cmd.Parameters.AddWithValue("@FG", cbm_FG.Text);
+                cmd.Parameters.AddWithValue("@Model", lbl_Model.Text);
+                cmd.Parameters.AddWithValue("@PCBA_ID", PCB_ID);
+                cmd.Parameters.AddWithValue("@Capacity", lbl_capacity.Text);
+                cmd.Parameters.AddWithValue("@Frequency", Frequence.Text);
+                cmd.Parameters.AddWithValue("@Version", lbl_Ver.Text);
+                cmd.Parameters.AddWithValue("@Release", lbl_Release.Text);
+                cmd.Parameters.AddWithValue("@Part", lbl_Part.Text);
+                cmd.Parameters.AddWithValue("@Result", result);
+                cmd.Parameters.AddWithValue("@ServerDateTime", server_datetime);
+                cmd.Parameters.AddWithValue("@Running_Converse", combinedValue);
+                cmd.Parameters.AddWithValue("@SPD_Value", SPD_Value);
+                cmd.Parameters.AddWithValue("@File_Path", lbl_Filepath.Text);
+                cmd.Parameters.AddWithValue("@System_Datetime", system_datetime);
 
-            if (cnn.State == ConnectionState.Closed) cnn.Open();
-            cmd.ExecuteNonQuery();
-            cnn.Close();
-            SPD_Value = "";
+                if (cnn.State == ConnectionState.Closed) cnn.Open();
+                cmd.ExecuteNonQuery();
+                cnn.Close();
+                SPD_Value = "";
+            }
+            catch(Exception ex)
+            {
+                rowDetails = null;
+                MessageBox.Show("Db Not Connected", ex.Message.ToString());
+                writeErrorMessage("DB not connected", "", "", "SPD page", ex.Message.ToString(), "SPD");
+            }
             return result;
 
 
@@ -1631,7 +1654,7 @@ namespace SPD_Write_Bot
         }
 
         //Hitachi
-        public string BotStart5(string serial_number,string customer_name)
+        public string BotStart5(string serial_number, string customer_name)
         {
             string result = "PASS"; // Default result is success unless an error occurs
             string checkbx1status = "Default checkbox ticked";  // Initialize default values
@@ -1697,7 +1720,7 @@ namespace SPD_Write_Bot
                         }
                     }
                 }
-                 SimulateLeftMouseClick(720, 395);
+                SimulateLeftMouseClick(720, 395);
                 Thread.Sleep(500);
                 //Write MSB Byte 
                 SimulateLeftMouseClick(568, 285);
@@ -1738,7 +1761,7 @@ namespace SPD_Write_Bot
                 SimulateLeftMouseClick(855, 395);
                 Thread.Sleep(500);
 
-               
+
 
                 if (serialnumber != null && serialnumber.Count > 0)
                 {
@@ -1930,15 +1953,26 @@ namespace SPD_Write_Bot
                     SimulateLeftMouseClick(698, 416);
                     Thread.Sleep(1000);
                     EnableMouse(true);
-                   
-                    rowDetails =  clsTableValue.Program(customer_name,serial_number);
+                    foreach (Form form in Application.OpenForms)
+                    {
+                        if (form is ResultDisplay)
+                        {
+                            form.Close();
+                            break;
+                        }
+                    }
+                    rowDetails = clsTableValue.Program(customer_name, serial_number);
+                    
                     ResultDisplay resultdisplay = new ResultDisplay(rowDetails, customer_name, serial_number);
-                    resultdisplay.StartPosition = FormStartPosition.Manual;
-                    resultdisplay.WindowState = FormWindowState.Normal;
-                    resultdisplay.Location = new Point(0, 100);
-                    resultdisplay.Show();
-                  //  resultdisplay.BringToFront();
-                    resultdisplay.Activate();
+                    if (resultdisplay != null)
+                    {
+                        resultdisplay.StartPosition = FormStartPosition.Manual;
+                        resultdisplay.WindowState = FormWindowState.Normal;
+                        resultdisplay.Location = new Point(0, 100);
+                        resultdisplay.Show();
+                        //  resultdisplay.BringToFront();
+                        resultdisplay.Activate();
+                    }
 
                     //buffer value and o0riginal value campare ok button Click
                     // SimulateLeftMouseClick(914, 641);
@@ -1968,9 +2002,12 @@ namespace SPD_Write_Bot
 
             }
             // Ensure the database connection is closed even if an error occurs
-            if (cnn.State == ConnectionState.Open) cnn.Close();
+           try
+           { 
+             if (cnn.State == ConnectionState.Open) cnn.Close();
 
-            SqlCommand cmd = new SqlCommand("INSERT INTO SPD_PROG_Log VALUES (@Customer, @FG, @Model,@PCBA_ID,@Capacity, @Frequency, @Version, @Release, @Part, @Result, @ServerDateTime, HOST_NAME(), @Running_Converse, @SPD_Value, @File_Path, @System_Datetime, '')", cnn);
+            cmd = new SqlCommand("pro_SPD_Write_Bot", cnn);
+            cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@Customer", cbm_Cus.Text);
             cmd.Parameters.AddWithValue("@FG", cbm_FG.Text);
             cmd.Parameters.AddWithValue("@Model", lbl_Model.Text);
@@ -1990,6 +2027,13 @@ namespace SPD_Write_Bot
             cmd.ExecuteNonQuery();
             cnn.Close();
             SPD_Value = "";
+           }
+           catch (Exception ex)
+           {
+                rowDetails = null;
+                MessageBox.Show("Db Not Connected", ex.Message.ToString());
+                writeErrorMessage("DB not connected", "", "", "SPD page", ex.Message.ToString(), "SPD");
+           }
             return result;
         }
 
