@@ -1543,25 +1543,51 @@ namespace SPD_Write_Bot
                     //        break;
                     //    }
                     //}
-                    Thread.Sleep(500);
+                   // Thread.Sleep(500);
                     table.writeErrorMessage("program start", "rowvalues", "");
                     Thread.Sleep(500);
                     rowDetails = clsTableValue.Program(customer_name, serial_number);
                     Thread.Sleep(100);
+                    if (rowDetails == null)
+                        return string.Empty;
                     table.writeErrorMessage(rowDetails.entries.Count() + "-" + rowDetails.hexDetails.Count(), "rowvalues", "");
                     ResultDisplay resultdisplay = new ResultDisplay(rowDetails, customer_name, serial_number);
                     Thread.Sleep(100);
-                    table.writeErrorMessage(rowDetails.entries.Count() + "-" + rowDetails.hexDetails.Count(), customer_name.ToString(), serial_number.ToString());
+                  
                     if (rowDetails != null)
                     {
                         if (rowDetails.entries.Count() > 0 && rowDetails.hexDetails.Count > 0)
                         {
-                            resultdisplay.StartPosition = FormStartPosition.Manual;
-                            resultdisplay.WindowState = FormWindowState.Normal;
-                            resultdisplay.Location = new Point(0, 100);
-                            resultdisplay.Show();
-                            // resultdisplay.BringToFront();
-                            resultdisplay.Activate();
+                            var oSerialNumber = textBox1.Text.ToString();
+                            string oTableSerialNumber = string.Empty;
+                            string oReverseSerialNumber =string.Empty;
+                            foreach (var entry in rowDetails.entries)
+                                oTableSerialNumber += entry.TableValue.ToString();
+
+
+                            if (oTableSerialNumber.Length >= 12)
+                            {
+                                oReverseSerialNumber = oTableSerialNumber.Substring(10, 2) + oTableSerialNumber.Substring(8, 2) + oTableSerialNumber.Substring(6, 2) + oTableSerialNumber.Substring(4, 2);
+                                oTableSerialNumber = oTableSerialNumber.Substring(4, 8);
+                            }
+
+                            table.writeErrorMessage(rowDetails.entries.Count() + "-" + rowDetails.hexDetails.Count() + "-" + "Text Box Number " + oSerialNumber + "- Read Value " + oTableSerialNumber , customer_name.ToString(), serial_number.ToString());
+                            if (oSerialNumber == oTableSerialNumber || oSerialNumber == oReverseSerialNumber)
+                            {
+                                resultdisplay.StartPosition = FormStartPosition.Manual;
+                                resultdisplay.WindowState = FormWindowState.Normal;
+                                resultdisplay.Location = new Point(0, 100);
+                                resultdisplay.Show();
+                                // resultdisplay.BringToFront();
+                                resultdisplay.Activate();
+                            }
+                            else
+                            {
+                                resultdisplay.Close();
+                                MessageBox.Show("Value MisMatch" ,"Error");
+                            }
+
+
                         }
                     }
 
@@ -2075,9 +2101,12 @@ namespace SPD_Write_Bot
                    ResultDisplay rsdisplay=new ResultDisplay(rowDetails,string.Empty,string.Empty);
                     foreach (Form form in Application.OpenForms)
                     {
+                        writeErrorMessage("FORM CHECKING", form.Text.ToString(), "", Error_filepath, "", "");
                         if (form is ResultDisplay)
                         {
+                            writeErrorMessage("FORM find", form.Text.ToString(), "", Error_filepath, "", "");
                             form.Close();
+                            writeErrorMessage("FORM Colsed", form.Text.ToString(), "", Error_filepath, "", "");
                             break;
                         }
                     }

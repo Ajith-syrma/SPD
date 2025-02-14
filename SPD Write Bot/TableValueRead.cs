@@ -101,7 +101,7 @@ namespace SPD_Write_Bot
                         writeErrorMessage(mainWindow.ToString(), "Main Window Count", mainWindow.Count.ToString());
                         foreach (AutomationElement MAINWindowINSIDE in mainWindow)
                         {
-                            if(MAINWindowINSIDE.Current.Name.ToString().Contains("DDR4 EZSPD Programmer V1.9.6"))
+                            if(MAINWindowINSIDE.Current.Name.ToString().Contains("DDR4 EZSPD Programmer"))
                             {
                                // writeErrorMessage("Child Page Name", MAINWindowINSIDE.Current.Name.ToString(), "");
                                 AutomationElementCollection CHILDWINDOWS = MAINWindowINSIDE.FindAll(TreeScope.Children, mainWindowCondition);
@@ -541,17 +541,18 @@ namespace SPD_Write_Bot
 
                 if (tableControls.Count == 0)
                 {
-                    Console.WriteLine("  No table-like controls found in this child window.");
+                    //Console.WriteLine("  No table-like controls found in this child window.");
+                    writeErrorMessage("Program Excuted Start", "No table-like controls found in this child window", "");
                 }
                 else
                 {
-                    Console.WriteLine("  Found table-like controls in this child window:");
+                   // Console.WriteLine("  Found table-like controls in this child window:");
                     writeErrorMessage("Program Excuted Start", "FindTablesInChildWindow", "ForEach");
                     foreach (AutomationElement tableControl in tableControls)
                     {
-                        Console.WriteLine($"    Table-like Control Name: {tableControl.Current.Name}");
-                        Console.WriteLine($"    Control AutomationId: {tableControl.Current.AutomationId}");
-                        Console.WriteLine($"    Control Type: {tableControl.Current.ControlType.ProgrammaticName}");
+                        //Console.WriteLine($"    Table-like Control Name: {tableControl.Current.Name}");
+                        //Console.WriteLine($"    Control AutomationId: {tableControl.Current.AutomationId}");
+                        //Console.WriteLine($"    Control Type: {tableControl.Current.ControlType.ProgrammaticName}");
 
                         // Now check if this control implements any relevant patterns like GridPattern
                         writeErrorMessage("Program Excuted Start", "FindTablesInChildWindow" + Customer_Name.ToString(), "Table Control");
@@ -580,9 +581,9 @@ namespace SPD_Write_Bot
                 // Check if the element supports GridPattern (commonly used for DataGridView)
                 if (element.TryGetCurrentPattern(GridPattern.Pattern, out object gridPattern))
                 {
-                    Console.WriteLine($"    Found DataGridView with GridPattern.");
+                   // Console.WriteLine($"    Found DataGridView with GridPattern.");
                     var grid = (GridPattern)gridPattern;
-                    Console.WriteLine($"    RowCount: {grid.Current.RowCount}, ColumnCount: {grid.Current.ColumnCount}");
+                   // Console.WriteLine($"    RowCount: {grid.Current.RowCount}, ColumnCount: {grid.Current.ColumnCount}");
 
                     // Lists to store values for column 2 and column 3
                     List<string> column2Values = new List<string>();
@@ -700,9 +701,11 @@ namespace SPD_Write_Bot
                     }
                     //  rowDetails.ramvalue = rowValuesInRange;
                     // rowDetails.hexvalue = rowValuesInRange_Hex;
-                    writeErrorMessage("Program Excuted Start", lstvalues.Count.ToString() + lsthexvalues.ToString(), "");
+                  
                     objentry.entries=lstvalues;
                     objentry.hexDetails = lsthexvalues;
+
+                    writeErrorMessage("Program Excuted Start", objentry.entries.Count.ToString() +"-"  + objentry.hexDetails.ToString(), "");
                     // Example: Perform comparison between values of column 2 and column 3
                     //For Customer Confirmation !
                     //  PerformComparison(column2Values, column3Values, rowValuesInRange, Customer_Name);
