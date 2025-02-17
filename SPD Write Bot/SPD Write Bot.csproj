@@ -72,6 +72,12 @@
   <ItemGroup>
     <Compile Include="checkBoxAutomation.cs" />
     <Compile Include="EntryDetails.cs" />
+    <Compile Include="SPDLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SPDLogin.Designer.cs">
+      <DependentUpon>SPDLogin.cs</DependentUpon>
+    </Compile>
     <Compile Include="ResultDisplay.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,6 +94,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="SPDLogin.resx">
+      <DependentUpon>SPDLogin.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ResultDisplay.resx">
       <DependentUpon>ResultDisplay.cs</DependentUpon>
     </EmbeddedResource>
