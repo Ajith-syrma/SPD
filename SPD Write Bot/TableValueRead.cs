@@ -25,7 +25,7 @@ namespace SPD_Write_Bot
         // Constructor to initialize instance fields
         public genclass Program(string Cus_Name,string Ser_Number)
         {
-           // writeErrorMessage("TableValue page entr",Cus_Name, Ser_Number);
+            writeErrorMessage("TableValue page entr",Cus_Name, Ser_Number);
             var rowDetails=new genclass();
             try
             {
